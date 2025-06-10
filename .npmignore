@@ -1,0 +1,50 @@
+# Source files
+src/
+*.ts
+!lib/**/*.d.ts
+
+# Test files
+src/__tests__/
+__tests__/
+*.test.js
+*.test.ts
+jest.config.js
+coverage/
+test-*.js
+check-*.js
+parsing-validation.js
+
+# Development files
+.gitignore
+.eslintrc.json
+tsconfig.json
+.github/
+docs/
+
+# Examples (keep them for npm package)
+# examples/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment files
+.env
+.env.*
+
+# Git files
+.git/
+.gitattributes
+
+# Build artifacts that shouldn't be published
+*.tsbuildinfo
