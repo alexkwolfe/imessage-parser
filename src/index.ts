@@ -1,5 +1,6 @@
 export { AttributedStringParser } from './parsers/attributed-string-parser';
 export { TypedStreamParser } from './parsers/typedstream-parser';
+export { parseMessageSummary } from './parsers/message-summary-parser';
 export { IMessageDatabase, MessageRow, MessageWithChat, ChatRow } from './imessage-database';
 export * from './types';
 export * from './utils/message-links';

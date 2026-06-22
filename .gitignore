@@ -7,3 +7,6 @@ coverage/
 .env
 .vscode/
 .idea/
+
+# Real-message test fixtures captured from a live chat.db — never commit
+src/__tests__/fixtures/
