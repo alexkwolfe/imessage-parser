@@ -1,11 +1,13 @@
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync } from 'fs';
 import { join } from 'path';
 import { parseMessageSummary } from '../parsers/message-summary-parser';
 
-// Real-message fixtures are gitignored (never committed). These two tests run
-// locally when a captured blob is present, and skip in CI / a fresh clone.
-const FIXTURE_PATH = join(__dirname, 'fixtures', 'edit-summary.bin');
-const HAS_FIXTURE = existsSync(FIXTURE_PATH);
+// A fully synthetic `message_summary_info` blob (fabricated from scratch — it
+// carries zero real message content) committed alongside the tests so the
+// fixture-backed cases always run in CI. Its edit-chain (`ec`) holds three
+// obviously-fake edit texts that decode in this exact order.
+const FIXTURE_PATH = join(__dirname, 'fixtures', 'edit-summary.sample.bin');
+const SAMPLE_EDITED_TEXTS = ['draft one', 'second pass', 'final copy'];
 
 /**
  * Minimal bplist00 encoder for tests. Supports the object kinds we need:
@@ -89,11 +91,10 @@ function encodeBplist(root: unknown): Buffer {
 }
 
 describe('parseMessageSummary', () => {
-  (HAS_FIXTURE ? it : it.skip)('extracts the ordered edited texts from a real blob', () => {
+  it('extracts the ordered edited texts from the synthetic blob', () => {
     const buf = readFileSync(FIXTURE_PATH);
     const out = parseMessageSummary(buf);
-    expect(out.editedTexts.length).toBeGreaterThan(0);
-    expect(typeof out.editedTexts[0]).toBe('string');
+    expect(out.editedTexts).toEqual(SAMPLE_EDITED_TEXTS);
     expect(out.unsent).toBe(false);
   });
 
@@ -172,12 +173,12 @@ describe('parseMessageSummary', () => {
     expect(out.unsent).toBe(false);
   });
 
-  (HAS_FIXTURE ? it : it.skip)('each editedText from the fixture is a non-empty string', () => {
+  it('decodes each synthetic editedText to its exact known value', () => {
     const buf = readFileSync(FIXTURE_PATH);
     const out = parseMessageSummary(buf);
-    for (const text of out.editedTexts) {
-      expect(typeof text).toBe('string');
-      expect(text.length).toBeGreaterThan(0);
-    }
+    expect(out.editedTexts).toHaveLength(SAMPLE_EDITED_TEXTS.length);
+    out.editedTexts.forEach((text, i) => {
+      expect(text).toBe(SAMPLE_EDITED_TEXTS[i]);
+    });
   });
 });

@@ -8,5 +8,10 @@ coverage/
 .vscode/
 .idea/
 
-# Real-message test fixtures captured from a live chat.db — never commit
-src/__tests__/fixtures/
+# Real-message test fixtures captured from a live chat.db — never commit.
+# Ignore the directory's *contents* (not the dir itself) so the negation below
+# can re-include the one synthetic fixture; a `dir/` rule would stop git from
+# descending and the `!` exception would never match.
+src/__tests__/fixtures/*
+# …except the fully synthetic, no-real-data sample fixture used by CI
+!src/__tests__/fixtures/edit-summary.sample.bin
